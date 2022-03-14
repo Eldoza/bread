@@ -18,9 +18,14 @@ breads.get('/new', (req, res) => {
 
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
-  if (Bread[req.params.arrayIndex]) {
+  console.log('REQ Object PARAMS =>', req.params )
+  
+  const currentIndex = req.params.arrayIndex
+
+  if (Bread[currentIndex]) {
     res.render('Show', {
-      bread:Bread[req.params.arrayIndex]
+      bread:Bread[currentIndex],
+      index: currentIndex
     })
   } else {
     res.render('notFound')
@@ -38,7 +43,13 @@ breads.post('/', (req, res) => {
     req.body.hasGluten = false
   }
   Bread.push(req.body)
-  res.redirect('/breads')
+  res.status(200).redirect('/breads')
+})
+
+// DELETE
+breads.delete('/:indexArray', (req, res) => {
+  Bread.splice(req.params.indexArray, 1)
+  res.status(303).redirect('/breads')
 })
 
 module.exports = breads
